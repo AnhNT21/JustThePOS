@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Sửa Menu</h2>
+<mat-dialog-content class="mat-typography">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-1">
+
+      </div>
+
+      <div class="col-md-3 tb-header cell-separator">
+        <b>Phím Tắt</b>
+      </div>
+
+      <div class="col-md-6 tb-header cell-separator">
+        <b>Món</b>
+      </div>
+      <div class="col-md-2 tb-header cell-separator right">
+        <b>Đơn Giá</b>
+      </div>
+    </div>
+
+    <div class="tb-content">
+      <app-menu-item (updateMe)="addToUpdateList(item)" (deleteMe)="addToDeleteList(item)" *ngFor="let item of menu" [item]=item></app-menu-item>
+    </div>
+
+    <div class="row">
+      <div class="col-md-1 center">
+
+      </div>
+
+      <div class="col-md-3 cell-separator">
+        <input matInput #shortcutInput style="text-align: left; width: 100%;">
+      </div>
+
+      <div class="col-md-6 cell-separator">
+        <input matInput (keyup.enter)="addNewItem()" #nameInput style="text-align: left; width: 100%;">
+      </div>
+
+      <div class="col-md-2 cell-separator right">
+        <input matInput (keyup.enter)="addNewItem()" #priceInput>
+      </div>
+    </div>
+  </div>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Huỷ</button>
+  <button mat-button [mat-dialog-close]="true" (click)='saveChange()' cdkFocusInitial>Lưu Thay Đổi</button>
+</mat-dialog-actions>

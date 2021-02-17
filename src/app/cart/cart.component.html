@@ -1,0 +1,159 @@
+<mat-card class="z-depth-1" style="overflow: scroll; height: 70%;">
+  <div class="row">
+    <div class="col-md-3">
+      <h5> Bàn {{ table.tableNumber }} </h5>
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3">
+      <p>Giờ Vào: {{ table.inTime | date:'dd-MM-yyyy HH:mm' }}</p>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+      <div class="col-md-5 tb-header cell-separator">
+        <b>Món</b>
+      </div>
+      <div class="col-md-2 tb-header cell-separator center">
+        <b>Đơn Giá</b>
+      </div>
+      <div class="col-md-2 tb-header cell-separator center">
+        <b>Số lượng</b>
+      </div>
+      <div class="col-md-2 tb-header cell-separator center no-padding">
+        <b>Thành Tiền</b>
+      </div>
+    </div>
+
+    <div class="tb-content">
+      <app-cart-item (itemIsEdited)="updateTotal()" (wantToRemoveItem)="deleteItem(item)" *ngFor = "let item of table.orderedItems" [item]="item"></app-cart-item>
+
+      <div class="row">
+        <div class="col-md-1 center">
+
+        </div>
+
+        <div class="col-md-5 cell-separator">
+
+          <input #newItemName [formControl]="myControl" [matAutocomplete]="auto" placeholder="+ Thêm" matInput style="width:100%;" (keyup.arrowleft)="subQuantity()" (keyup.arrowright)="addQuantity()">
+
+          <mat-autocomplete #auto="matAutocomplete" [autoActiveFirstOption]='true' [displayWith]="displayFn" (optionSelected)="addItem($event.option.value)">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{ option.name }}
+            </mat-option>
+          </mat-autocomplete>
+
+        </div>
+
+        <div class="col-md-2 cell-separator right">
+
+          <input #newItemPrice matInput style="width: 100%; text-align: right;">
+
+        </div>
+
+        <div class="col-md-2 cell-separator center no-padding">
+          <button mat-flat-button (click) = "subQuantity()">-</button>
+
+          <input #newItemQuantity matInput (change)="quantityChange()" style="width: 35% !important; text-align: center;" value="{{ table.lastQuant }}">
+
+          <button mat-flat-button (click) = "addQuantity()">+</button>
+        </div>
+        <div class="col-md-2 cell-separator right">
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</mat-card>
+
+<button mat-raised-button color="primary" (click)="addNew()" style="margin: 10px;"> + Thêm</button>
+
+<!-- Total and Payment  button -->
+
+<div class="totalAndPay">
+  <div class="total">
+    <h3 style="float: left;">Tổng Cộng: </h3>
+    <h3 style="float: right;">{{ table.grandTotal | number: '1.' }}</h3>
+  </div>
+  <button id="tableCloseBtn" (click)="closeTable()" mat-raised-button color="warn" style="margin: 10px;" *ngIf="!table.orderedItems.length">Đóng Bàn</button>
+  <button id="cancelPaymentBtn" (click)="table.paid = false" mat-raised-button color="warn" style="margin: 10px;" *ngIf="table.paid && table.active">Huỷ TT</button>
+  <button id="payBtn" (click)="pay()" mat-raised-button color="primary" style="margin: 10px;" *ngIf="table.orderedItems.length"> {{ table.paid ? "Dọn Bàn" : "Thanh Toán" }}</button>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- template To Print -->
+<div id="printTemplate" style="display: none;">
+
+  <div class="container">
+    <div class="brand">
+        <h3>Lẩu Vịt 117</h3>
+        <p>Địa Chỉ: 117 Nguyễn Thiếp, <br> TP.Vinh, Nghệ An</p>
+    </div>
+    <div class="contact">
+        <p>SĐT Đặt Hàng: 094.6677.333</p>
+    </div>
+
+    <h2>HOÁ ĐƠN THANH TOÁN</h2>
+
+    <div class="inOutTime">
+        <p style="width: 100%;">Ngày {{ table.inTime | date:'dd' }}
+                                Tháng {{ table.inTime | date:'MM' }}
+                                Năm {{ table.inTime | date:'yyyy' }}</p>
+
+        <p>Giờ Vào: {{ table.inTime | date:'HH:mm' }}</p>
+        <p>Giờ Ra:  {{ table.outTime | date:'HH:mm' }}</p>
+    </div>
+
+    <div class="tableNumb">
+        <h2><b>Bàn: {{ table.tableNumber }}</b></h2>
+    </div>
+
+
+    <!-- Table Section -->
+    <table>
+        <tr>
+            <th width="5%" class="center">STT</th>
+            <th>Tên Hàng</th>
+            <th width="20%">Đơn Giá</th>
+            <th width="10%" class="center">SL</th>
+            <th width="25%" class="right">Thành Tiền</th>
+        </tr>
+        <tr *ngFor="let item of table.orderedItems; index as i">
+            <td class="center"> {{ i+1 }}</td>
+            <td>{{ item.itemName }}</td>
+            <td class="right">{{ item.price | number: '1.'}}</td>
+            <td class="center">{{ item.quantity }}</td>
+            <td class="right">{{ item.cost | number: '1.'}}</td>
+        </tr>
+        <tr>
+            <th colspan="4">Tổng Cộng</th>
+            <th style="text-align: right; padding: 0 10px;">{{ table.grandTotal | number: '1.'}}</th>
+        </tr>
+    </table>
+
+
+    <!-- Footer -->
+    <p style="display:block; width: 93%; font-size: 12px;padding: 0 10px;text-align: right;font-family: Arial, Helvetica, sans-serif;">(Đơn Giá trên chưa bào gồm thuế VAT)</p>
+
+    <h3 style="text-align: center; font-family: Arial, Helvetica, sans-serif;">CHÂN THÀNH CẢM ƠN QUÝ KHÁCH</h3>
+
+    <p class="billNo">Ref: {{ receiptNo }}</p>
+  </div>
+</div>

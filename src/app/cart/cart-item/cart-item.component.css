@@ -1,0 +1,39 @@
+.cell-separator {
+  border-left: 1px solid blue;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
+.left {
+  text-align: left;
+}
+
+button {
+  outline: none;
+  max-width: 10%;
+}
+
+a {
+  cursor: pointer;
+}
+
+input {
+  text-align: right;
+  max-width: 100%;
+  border: none;
+  outline: none;
+}
+
+.mat-flat-button {
+  min-width: 30%  !important;
+}
+
+.no-padding {
+  padding: 0;
+}

@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-md-1 center">
+    <a><mat-icon (click)="confirmPrompt()">cancel</mat-icon></a>
+  </div>
+
+  <div class="col-md-3 cell-separator">
+    <input (change)="itemEdited()" matInput #shortcutField value="{{ item.shortcut }}" style="text-align: left; width: 100%;">
+  </div>
+
+  <div class="col-md-6 cell-separator">
+    {{ item.name }}
+    <!-- <input (change)="itemEdited()" matInput #nameField value="{{ item.name }}" style="text-align: left; width: 100%;"> -->
+  </div>
+
+  <div class="col-md-2 cell-separator right">
+    <input (change)="itemEdited()" matInput #priceField value="{{ item.price | number: '1.' }}">
+  </div>
+</div>

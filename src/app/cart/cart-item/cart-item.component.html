@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col-md-1 center">
+    <a (click)="deleteItem()"><mat-icon>cancel</mat-icon></a>
+  </div>
+
+  <div class="col-md-5 cell-separator">
+    {{ item.itemName }}
+    <mat-checkbox style="float: right;"></mat-checkbox>
+  </div>
+
+  <div class="col-md-2 cell-separator right">
+    <input (change)="itemEdited()" matInput #priceInput value="{{ item.price | number: '1.' }}">
+  </div>
+  <div class="col-md-2 cell-separator center no-padding">
+    <button mat-flat-button (click) = "subQuantity()">-</button>
+    <input (change)="itemEdited()" matInput #quantityInput style="width:35%; text-align: center;"value="{{ item.quantity }}">
+    <button mat-flat-button (click) = "addQuantity()">+</button>
+  </div>
+  <div class="col-md-2 cell-separator right">
+    {{ item.cost | number: '1.' }}
+  </div>
+</div>
